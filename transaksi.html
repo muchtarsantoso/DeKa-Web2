@@ -21,17 +21,17 @@
             <a href="index.html" class="text-gray-400 hover:text-white mr-4">
                 <i class="fas fa-arrow-left text-xl"></i>
             </a>
-            <h1 class="font-bold text-lg">Isi Pulsa Telkomsel</h1>
+            <h1 id="judul-header" class="font-bold text-lg">Isi Produk</h1>
         </header>
 
-        <!-- Info Provider -->
+        <!-- Info Provider Dinamis -->
         <div class="p-4 flex items-center gap-4 bg-gray-800 border-b border-gray-700">
-            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                <span class="text-red-600 font-bold text-3xl">T</span>
+            <div id="badge-logo" class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white">
+                T
             </div>
             <div>
-                <h2 class="font-bold text-xl">Telkomsel</h2>
-                <p class="text-xs text-gray-400"><i class="fas fa-bolt text-yellow-400"></i> Proses Cepat 24/7</p>
+                <h2 id="nama-provider" class="font-bold text-xl">Memuat...</h2>
+                <p class="text-xs text-gray-400"><i class="fas fa-bolt text-yellow-400"></i> Proses Otomatis 24/7</p>
             </div>
         </div>
 
@@ -40,46 +40,38 @@
             <div>
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">1</div>
-                    <h3 class="font-bold">Masukkan Data Akun</h3>
+                    <h3 class="font-bold">Masukkan Nomor / ID Tujuan</h3>
                 </div>
                 <label class="text-xs text-gray-400 mb-1 block">Nomor Tujuan *</label>
                 <input type="number" id="input-nomor" placeholder="08xxxxxxxxxx" class="w-full bg-gray-800 border border-gray-700 rounded-xl p-3 text-white focus:outline-none focus:border-blue-500 transition">
             </div>
 
-            <!-- Langkah 2: Pilih Nominal -->
+            <!-- Langkah 2: Pilih Nominal & Filter Kategori -->
             <div>
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">2</div>
-                    <h3 class="font-bold">Pilih Nominal</h3>
+                    <h3 class="font-bold">Pilih Nominal / Paket</h3>
                 </div>
+
+                <!-- CONTAINER TAB KATEGORI -->
+                <div id="kategori-container" class="flex gap-2 overflow-x-auto pb-2 mb-3 no-scrollbar">
+                    <!-- Tombol kategori diisi JS -->
+                </div>
+
+                <!-- Grid Produk -->
                 <div class="grid grid-cols-2 gap-3" id="daftar-produk">
-                    <div class="produk-item bg-gray-800 border border-gray-700 rounded-xl p-3 cursor-pointer transition" data-nama="Telkomsel 5.000" data-harga="5500">
-                        <h4 class="font-bold text-lg pointer-events-none">5.000</h4>
-                        <p class="text-sm text-blue-400 font-semibold pointer-events-none">Rp 5.500</p>
-                    </div>
-                    <div class="produk-item bg-gray-800 border border-gray-700 rounded-xl p-3 cursor-pointer transition" data-nama="Telkomsel 10.000" data-harga="10500">
-                        <h4 class="font-bold text-lg pointer-events-none">10.000</h4>
-                        <p class="text-sm text-blue-400 font-semibold pointer-events-none">Rp 10.500</p>
-                    </div>
-                    <div class="produk-item bg-gray-800 border border-gray-700 rounded-xl p-3 cursor-pointer transition relative overflow-hidden" data-nama="Telkomsel 20.000 (Promo)" data-harga="19900">
-                        <div class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg pointer-events-none">PROMO</div>
-                        <h4 class="font-bold text-lg pointer-events-none">20.000</h4>
-                        <p class="text-sm text-blue-400 font-semibold pointer-events-none">Rp 19.900</p>
-                    </div>
-                    <div class="produk-item bg-gray-800 border border-gray-700 rounded-xl p-3 cursor-pointer transition" data-nama="Telkomsel 50.000" data-harga="49500">
-                        <h4 class="font-bold text-lg pointer-events-none">50.000</h4>
-                        <p class="text-sm text-blue-400 font-semibold pointer-events-none">Rp 49.500</p>
-                    </div>
+                    <div class="col-span-2 text-center text-gray-400 py-6">Sedang mengambil produk dari Google Sheets...</div>
                 </div>
             </div>
 
-            <!-- Langkah 3: Pilih Pembayaran -->
+            <!-- Langkah 3: Pilih Pembayaran (QRIS Otomatis Terpilih) -->
             <div>
                 <div class="flex items-center gap-2 mb-3">
                     <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">3</div>
                     <h3 class="font-bold">Pilih Pembayaran</h3>
                 </div>
-                <div id="metode-qris" class="bg-gray-800 border border-gray-700 rounded-xl p-4 flex justify-between items-center cursor-pointer transition">
+                <!-- Div QRIS Aktif Bawaan (Border Blue) -->
+                <div id="metode-qris" class="bg-gray-800 border-2 border-blue-500 rounded-xl p-4 flex justify-between items-center cursor-pointer transition">
                     <div class="flex items-center gap-3 pointer-events-none">
                         <i class="fas fa-qrcode text-2xl text-blue-400"></i>
                         <div>
@@ -87,7 +79,10 @@
                             <p class="text-xs text-gray-400">Bebas biaya admin</p>
                         </div>
                     </div>
-                    <div id="radio-qris" class="w-5 h-5 rounded-full border-2 border-gray-500 pointer-events-none transition"></div>
+                    <!-- Radio Button Aktif (bg-blue-500) -->
+                    <div id="radio-qris" class="w-5 h-5 rounded-full border-2 border-blue-500 bg-blue-500 flex items-center justify-center pointer-events-none transition">
+                        <i class="fas fa-check text-[10px] text-white"></i>
+                    </div>
                 </div>
             </div>
         </main>
@@ -105,74 +100,213 @@
 
     </div>
 
-    <!-- SCRIPT INTERAKTIF & WHATSAPP CHECKOUT -->
+    <!-- SCRIPT LOGIKA TRANSAKSI -->
     <script>
-        const produkItems = document.querySelectorAll('.produk-item');
+        const urlParams = new URLSearchParams(window.location.search);
+        const providerTarget = urlParams.get('provider') || 'Telkomsel';
+
+        const judulHeader = document.getElementById('judul-header');
+        const namaProvider = document.getElementById('nama-provider');
+        const badgeLogo = document.getElementById('badge-logo');
+        const inputNomor = document.getElementById('input-nomor');
         const teksTotalHarga = document.getElementById('total-harga-teks');
         const tombolPesan = document.getElementById('tombol-pesan');
-        const inputNomor = document.getElementById('input-nomor');
-        
-        const metodeQris = document.getElementById('metode-qris');
-        const radioQris = document.getElementById('radio-qris');
+        const kategoriContainer = document.getElementById('kategori-container');
+        const daftarProduk = document.getElementById('daftar-produk');
 
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbwVdzWWQZ8o1cUYnnWgmexuCOMl9wL2iw-l0GxPtkzvOGEKczoXgcmSqBcsKZUGrmDKiA/exec";
+
+        let semuaProduk = [];
+        let kodeProdukTerpilih = '';
         let namaProdukTerpilih = '';
         let hargaTerpilih = 0;
-        let pembayaranTerpilih = false;
+        let pembayaranTerpilih = true; // DEFAULT SELALU TERPILIH (QRIS)
+
+        function aturTampilanProvider(p) {
+            judulHeader.innerText = "Isi " + p;
+            namaProvider.innerText = p;
+
+            let namaLower = p.toLowerCase();
+            if (namaLower.includes('telkomsel')) {
+                badgeLogo.className = "w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
+                badgeLogo.innerText = "T";
+            } else if (namaLower.includes('indosat')) {
+                badgeLogo.className = "w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-black";
+                badgeLogo.innerText = "I";
+            } else if (namaLower.includes('by.u') || namaLower.includes('byu')) {
+                badgeLogo.className = "w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
+                badgeLogo.innerText = "B";
+            } else if (namaLower.includes('xl')) {
+                badgeLogo.className = "w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
+                badgeLogo.innerText = "XL";
+            } else if (namaLower.includes('axis')) {
+                badgeLogo.className = "w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
+                badgeLogo.innerText = "AX";
+            } else if (namaLower.includes('tri')) {
+                badgeLogo.className = "w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
+                badgeLogo.innerText = "3";
+            } else if (namaLower.includes('pln')) {
+                badgeLogo.className = "w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-black";
+                badgeLogo.innerHTML = '<i class="fas fa-bolt"></i>';
+            } else if (namaLower.includes('wallet')) {
+                badgeLogo.className = "w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
+                badgeLogo.innerHTML = '<i class="fas fa-wallet"></i>';
+            } else {
+                badgeLogo.className = "w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
+                badgeLogo.innerText = p.charAt(0).toUpperCase();
+            }
+        }
 
         function formatRupiah(angka) {
             return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
+        async function ambilProduk() {
+          aturTampilanProvider(providerTarget);
+          
+          try {
+            const response = await fetch(`${webAppUrl}?action=getProducts&provider=${encodeURIComponent(providerTarget)}`); 
+            semuaProduk = await response.json();
+            
+            if (semuaProduk.length === 0) {
+              daftarProduk.innerHTML = `<div class="col-span-2 text-center text-gray-400 py-6">Tidak ada produk ${providerTarget} yang aktif.</div>`;
+              return;
+            }
+
+            const isPln = providerTarget.toLowerCase().includes('pln');
+
+            if (isPln) {
+                kategoriContainer.innerHTML = '';
+                kategoriContainer.style.display = 'none';
+                tampilkanProduk('Semua');
+            } else {
+                kategoriContainer.style.display = 'flex';
+                buatTabKategori();
+                tampilkanProduk('Semua');
+            }
+
+          } catch (error) {
+            console.error('Error:', error);
+            daftarProduk.innerHTML = '<div class="col-span-2 text-center text-red-400 py-6">Gagal memuat produk dari server.</div>';
+          }
+        }
+
+        function buatTabKategori() {
+            kategoriContainer.innerHTML = '';
+            const listKategori = ['Semua', ...new Set(semuaProduk.map(p => p.kategori))];
+
+            listKategori.forEach((kat, index) => {
+                const btn = document.createElement('button');
+                btn.className = `btn-kategori whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition ${index === 0 ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 border border-gray-700 hover:text-white'}`;
+                btn.innerText = kat;
+                
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.btn-kategori').forEach(b => {
+                        b.className = 'btn-kategori whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition bg-gray-800 text-gray-400 border border-gray-700 hover:text-white';
+                    });
+                    this.className = 'btn-kategori whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition bg-blue-600 text-white';
+                    tampilkanProduk(kat);
+                });
+
+                kategoriContainer.appendChild(btn);
+            });
+        }
+
+        function tampilkanProduk(kategoriAktif) {
+            daftarProduk.innerHTML = '';
+            const produkFilter = kategoriAktif === 'Semua' 
+                ? semuaProduk 
+                : semuaProduk.filter(p => p.kategori === kategoriAktif);
+
+            if (produkFilter.length === 0) {
+                daftarProduk.innerHTML = '<div class="col-span-2 text-center text-gray-400 py-6">Tidak ada produk di kategori ini.</div>';
+                return;
+            }
+
+            produkFilter.forEach(p => {
+              const divProduk = document.createElement('div');
+              divProduk.className = 'produk-item bg-gray-800 border border-gray-700 rounded-xl p-3 cursor-pointer transition';
+              
+              divProduk.setAttribute('data-kode', p.kode);
+              divProduk.setAttribute('data-nama', p.nama);
+              divProduk.setAttribute('data-harga', p.harga);
+
+              divProduk.innerHTML = `
+                <h4 class="font-bold text-base pointer-events-none">${p.nama}</h4>
+                <p class="text-sm text-blue-400 font-semibold pointer-events-none">${formatRupiah(p.harga)}</p>
+              `;
+
+              daftarProduk.appendChild(divProduk);
+            });
+
+            aktifkanFungsiKlikProduk();
+        }
+
+        ambilProduk();
+
         function cekKelengkapan() {
-            // Tombol menyala jika nomor HP diisi minimal 9 digit, produk dipilih, dan pembayaran dipilih
-            if (inputNomor.value.length >= 9 && hargaTerpilih > 0 && pembayaranTerpilih) {
+            if (inputNomor.value.length >= 5 && hargaTerpilih > 0 && pembayaranTerpilih) {
                 tombolPesan.classList.remove('opacity-50', 'cursor-not-allowed');
             } else {
                 tombolPesan.classList.add('opacity-50', 'cursor-not-allowed');
             }
         }
 
-        // Pilihan Produk
-        produkItems.forEach(item => {
-            item.addEventListener('click', function() {
-                produkItems.forEach(el => {
-                    el.classList.remove('border-blue-500', 'bg-gray-700');
-                    el.classList.add('border-gray-700', 'bg-gray-800');
+        function aktifkanFungsiKlikProduk() {
+            const produkItems = document.querySelectorAll('.produk-item');
+            produkItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    produkItems.forEach(el => {
+                        el.classList.remove('border-blue-500', 'bg-gray-700');
+                        el.classList.add('border-gray-700', 'bg-gray-800');
+                    });
+                    
+                    this.classList.remove('border-gray-700', 'bg-gray-800');
+                    this.classList.add('border-blue-500', 'bg-gray-700');
+
+                    kodeProdukTerpilih = this.getAttribute('data-kode');
+                    namaProdukTerpilih = this.getAttribute('data-nama');
+                    hargaTerpilih = parseInt(this.getAttribute('data-harga'));
+                    teksTotalHarga.innerText = formatRupiah(hargaTerpilih);
+                    
+                    cekKelengkapan();
                 });
-                
-                this.classList.remove('border-gray-700', 'bg-gray-800');
-                this.classList.add('border-blue-500', 'bg-gray-700');
-
-                namaProdukTerpilih = this.getAttribute('data-nama');
-                hargaTerpilih = parseInt(this.getAttribute('data-harga'));
-                teksTotalHarga.innerText = formatRupiah(hargaTerpilih);
-                
-                cekKelengkapan();
             });
-        });
+        }
 
-        // Pilihan Pembayaran QRIS
-        metodeQris.addEventListener('click', function() {
-            this.classList.add('border-blue-500');
-            radioQris.classList.add('bg-blue-500', 'border-blue-500');
-            pembayaranTerpilih = true;
-            
-            cekKelengkapan();
-        });
-
-        // Jika nomor HP diketik
         inputNomor.addEventListener('input', cekKelengkapan);
 
-        // Saat tombol Pesan Sekarang diklik
-        tombolPesan.addEventListener('click', function() {
+        // KLIK TOMBOL PESAN SEKARANG
+        tombolPesan.addEventListener('click', async function() {
             if (!this.classList.contains('cursor-not-allowed')) {
                 let nomorTujuan = inputNomor.value;
-                let noWhatsAppOwner = "628811168230"; // Ganti dengan nomor WhatsApp DeKa Cell Anda (awali 62)
                 
-                let pesan = `Halo DeKa Cell, saya ingin memesan:\n\n*Produk:* ${namaProdukTerpilih}\n*No Tujuan:* ${nomorTujuan}\n*Pembayaran:* QRIS All Payment\n*Total:* ${formatRupiah(hargaTerpilih)}\n\nMohon proses pesanan saya. Terima kasih!`;
+                // 1. Generate ID TRX Acak 8 karakter (contoh: 3bddc48a)
+                let idTrx = Math.random().toString(36).substring(2, 10);
                 
-                let encodedPesan = encodeURIComponent(pesan);
-                window.open(`https://wa.me/${noWhatsAppOwner}?text=${encodedPesan}`, '_blank');
+                // 2. Generate Kode Unik Pembayaran (100-999)
+                let kodeUnik = Math.floor(Math.random() * 899) + 100;
+                let totalUnik = hargaTerpilih + kodeUnik;
+
+                // Tampilan tombol loading
+                tombolPesan.disabled = true;
+                tombolPesan.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+
+                try {
+                    // 3. Kirim Data Ke Google Sheets (Tab Transaksi)
+                    let urlKirim = `${webAppUrl}?action=addTransaction&id_trx=${idTrx}&kode_produk=${encodeURIComponent(kodeProdukTerpilih)}&no_hp=${encodeURIComponent(nomorTujuan)}&total_bayar=${hargaTerpilih}&total_unik=${totalUnik}`;
+                    
+                    await fetch(urlKirim);
+
+                    // 4. Pindah ke Halaman Bayar (bayar.html) membawa detail pesanan
+                    let paramBayar = `id_trx=${idTrx}&produk=${encodeURIComponent(namaProdukTerpilih)}&nomor=${encodeURIComponent(nomorTujuan)}&harga=${hargaTerpilih}&total_unik=${totalUnik}`;
+                    window.location.href = `bayar.html?${paramBayar}`;
+
+                } catch (err) {
+                    alert("Gagal menghubungkan ke server. Silakan coba lagi.");
+                    tombolPesan.disabled = false;
+                    tombolPesan.innerHTML = '<i class="fas fa-shopping-bag"></i> Pesan Sekarang!';
+                }
             }
         });
     </script>

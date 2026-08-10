@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran QRIS - DeKa Reload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex justify-center min-h-screen">
+
+    <div class="w-full max-w-md bg-gray-900 min-h-screen relative shadow-2xl pb-24 border-x border-gray-800 flex flex-col">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center p-4 sticky top-0 bg-gray-900/90 backdrop-blur-md z-50 border-b border-gray-800">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="text-gray-400 hover:text-white transition">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </a>
+                <h1 class="font-bold text-base">Instruksi Pembayaran</h1>
+            </div>
+            <button onclick="window.location.reload();" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-sync-alt text-base"></i>
+            </button>
+        </header>
+
+        <main class="p-4 space-y-5 flex-1">
+
+            <!-- Status Badge Banner -->
+            <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">
+                        <i class="fas fa-clock animate-pulse"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-amber-400/80 uppercase font-semibold tracking-wider">Status Transaksi</p>
+                        <p id="detail-status" class="text-xs font-bold text-amber-300 uppercase">MENUNGGU PEMBAYARAN</p>
+                    </div>
+                </div>
+                <span class="text-[10px] bg-amber-500/20 text-amber-300 font-bold px-2.5 py-1 rounded-lg border border-amber-500/30">Pending</span>
+            </div>
+
+            <!-- Card Total Nominal TF (Highlight Utama) -->
+            <div class="bg-gradient-to-br from-blue-900/40 via-indigo-900/30 to-gray-800 border border-blue-500/30 rounded-2xl p-5 text-center relative overflow-hidden shadow-xl">
+                <p class="text-xs text-blue-200 mb-1 font-medium">Total Nominal Transfer</p>
+                
+                <div class="flex items-center justify-center gap-2 my-2">
+                    <span id="nominal-tf" class="text-3xl font-extrabold text-blue-400 tracking-tight">Rp 0</span>
+                    <button onclick="salinNominal()" class="bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white text-xs px-2.5 py-1.5 rounded-lg border border-blue-400/30 transition flex items-center gap-1 active:scale-95 shadow">
+                        <i class="far fa-copy"></i> <span id="teks-salin">Salin</span>
+                    </button>
+                </div>
+
+                <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-2.5 mt-3 text-left flex items-start gap-2">
+                    <i class="fas fa-exclamation-circle text-amber-400 text-sm mt-0.5"></i>
+                    <p class="text-[11px] text-amber-200/90 leading-tight">
+                        Transfer <b>HARUS PERSIS</b> hingga 3 digit terakhir agar pembayaran otomatis terverifikasi!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card QRIS -->
+            <div class="bg-gray-800/80 border border-gray-700/80 rounded-2xl p-5 flex flex-col items-center justify-center shadow-lg">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="fas fa-qrcode text-blue-400 text-base"></i>
+                    <h3 class="text-xs font-bold text-gray-200 uppercase tracking-wider">Scan QRIS All Payment</h3>
+                </div>
+                
+                <!-- Box Gambar QR Code -->
+                <div class="bg-white p-3 rounded-2xl shadow-xl border-2 border-blue-500/40 my-1">
+                    <img id="gambar-qris" src="qris.jpg" alt="QRIS DeKa Reload" class="w-52 h-52 object-contain" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DEKA_RELOAD_QRIS'">
+                </div>
+
+                <p class="text-[10px] text-gray-400 text-center mt-3 max-w-[280px]">
+                    Mendukung GoPay, OVO, DANA, ShopeePay, BCA, BRI, Mandiri, & Seluruh e-Wallet / Mobile Banking.
+                </p>
+            </div>
+
+            <!-- Cara Pembayaran Praktis -->
+            <div class="bg-gray-800/40 border border-gray-700/60 rounded-2xl p-4 text-xs space-y-2.5">
+                <h3 class="font-bold text-gray-200 text-xs border-b border-gray-700/60 pb-2 flex items-center gap-2">
+                    <i class="fas fa-mobile-alt text-blue-400"></i> Cara Bayar dari HP yang sama:
+                </h3>
+                <div class="space-y-2 text-gray-300 text-[11px] leading-relaxed">
+                    <div class="flex items-start gap-2.5">
+                        <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">1</span>
+                        <p><b>Screenshot</b> layar yang menampilkan QRIS di atas.</p>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">2</span>
+                        <p>Buka aplikasi Bank atau E-Wallet pilihan Anda.</p>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">3</span>
+                        <p>Pilih menu <b>Scan / QRIS</b> lalu klik ikon <b>Galeri / Foto</b>.</p>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">4</span>
+                        <p>Pilih foto hasil screenshot QRIS tadi dan masukkan nominal persis.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Rincian Pesanan -->
+            <div class="bg-gray-800 border border-gray-700 rounded-2xl p-4 space-y-3 text-xs shadow-md">
+                <h3 class="font-bold text-gray-200 border-b border-gray-700 pb-2 flex items-center gap-2">
+                    <i class="fas fa-file-invoice text-blue-400"></i> Detail Rincian Pesanan
+                </h3>
+
+                <div class="flex justify-between items-center py-1">
+                    <span class="text-gray-400">ID Transaksi</span>
+                    <div class="flex items-center gap-2">
+                        <span id="detail-idtrx" class="font-mono font-bold text-blue-300 text-xs">-</span>
+                        <button onclick="salinIdTrx()" class="text-gray-400 hover:text-white text-[10px] transition"><i class="far fa-copy"></i></button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center py-1 border-t border-gray-700/50">
+                    <span class="text-gray-400">Produk</span>
+                    <span id="detail-produk" class="font-bold text-gray-200 text-right max-w-[200px] truncate">-</span>
+                </div>
+
+                <div class="flex justify-between items-center py-1 border-t border-gray-700/50">
+                    <span class="text-gray-400">Nomor Tujuan</span>
+                    <span id="detail-nomor" class="font-bold text-gray-200 font-mono">-</span>
+                </div>
+
+                <div class="flex justify-between items-center py-1 border-t border-gray-700/50">
+                    <span class="text-gray-400">Harga Produk</span>
+                    <span id="detail-harga" class="font-bold text-gray-200">-</span>
+                </div>
+
+                <div class="flex justify-between items-center py-1 border-t border-gray-700/50">
+                    <span class="text-gray-400">Kode Unik</span>
+                    <span id="detail-kode-unik" class="font-bold text-amber-400">+Rp 0</span>
+                </div>
+
+                <div class="flex justify-between items-center pt-2.5 border-t border-gray-700">
+                    <span class="font-bold text-gray-200">Total Pembayaran</span>
+                    <span id="detail-total-akhir" class="font-extrabold text-blue-400 text-sm">-</span>
+                </div>
+            </div>
+
+            <!-- Tombol Konfirmasi WA -->
+            <div class="pt-2">
+                <button id="btn-wa" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2 text-xs active:scale-95">
+                    <i class="fab fa-whatsapp text-lg"></i> Konfirmasi Pembayaran ke WA Admin
+                </button>
+            </div>
+
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="fixed bottom-0 w-full max-w-md bg-gray-900/90 backdrop-blur-md border-t border-gray-800 p-2 flex justify-around items-center z-50">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-blue-500">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[10px] font-medium">Beranda</span>
+            </a>
+            <a href="https://wa.me/628811168230" target="_blank" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-300">
+                <i class="fas fa-comments text-lg"></i>
+                <span class="text-[10px] font-medium">Bantuan</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- SCRIPT LOGIKA -->
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const idTrx = urlParams.get('id_trx') || '-';
+        const produk = urlParams.get('produk') || '-';
+        const nomor = urlParams.get('nomor') || '-';
+        const hargaAwal = parseInt(urlParams.get('harga')) || 0;
+        const totalUnik = parseInt(urlParams.get('total_unik')) || 0;
+        const nilaiKodeUnik = totalUnik - hargaAwal;
+
+        function formatRupiah(angka) {
+            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Tampilkan Data ke Layar
+        document.getElementById('nominal-tf').innerText = formatRupiah(totalUnik);
+        document.getElementById('detail-produk').innerText = produk;
+        document.getElementById('detail-nomor').innerText = nomor;
+        document.getElementById('detail-harga').innerText = formatRupiah(hargaAwal);
+        document.getElementById('detail-kode-unik').innerText = '+Rp ' + nilaiKodeUnik;
+        document.getElementById('detail-total-akhir').innerText = formatRupiah(totalUnik);
+        document.getElementById('detail-idtrx').innerText = idTrx;
+
+        // Fungsi Salin Angka Nominal
+        function salinNominal() {
+            navigator.clipboard.writeText(totalUnik.toString());
+            const teksSalin = document.getElementById('teks-salin');
+            teksSalin.innerText = 'Tersalin!';
+            setTimeout(() => {
+                teksSalin.innerText = 'Salin';
+            }, 2000);
+        }
+
+        // Fungsi Salin ID TRX
+        function salinIdTrx() {
+            navigator.clipboard.writeText(idTrx);
+            alert("ID Transaksi berhasil disalin!");
+        }
+
+        // Tombol WhatsApp
+        document.getElementById('btn-wa').addEventListener('click', function() {
+            let noWa = "628811168230";
+            let msg = `Halo DeKa Reload, saya sudah transfer via QRIS:\n\n*ID TRX:* ${idTrx}\n*Produk:* ${produk}\n*Nomor Tujuan:* ${nomor}\n*Total Transfer:* ${formatRupiah(totalUnik)}\n\nMohon bantu verifikasi pesanan saya. Terima kasih!`;
+            window.open(`https://wa.me/${noWa}?text=${encodeURIComponent(msg)}`, '_blank');
+        });
+    </script>
+</body>
+</html>
