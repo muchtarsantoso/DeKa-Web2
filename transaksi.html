@@ -27,7 +27,7 @@
         <!-- Info Provider Dinamis -->
         <div class="p-4 flex items-center gap-4 bg-gray-800 border-b border-gray-700">
             <div id="badge-logo" class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white">
-                T
+                <i class="fas fa-spinner fa-spin"></i>
             </div>
             <div>
                 <h2 id="nama-provider" class="font-bold text-xl">Memuat...</h2>
@@ -53,14 +53,10 @@
                     <h3 class="font-bold">Pilih Nominal / Paket</h3>
                 </div>
 
-                <!-- CONTAINER TAB KATEGORI -->
-                <div id="kategori-container" class="flex gap-2 overflow-x-auto pb-2 mb-3 no-scrollbar">
-                    <!-- Tombol kategori diisi JS -->
-                </div>
+                <div id="kategori-container" class="flex gap-2 overflow-x-auto pb-2 mb-3 no-scrollbar"></div>
 
-                <!-- Grid Produk -->
                 <div class="grid grid-cols-2 gap-3" id="daftar-produk">
-                    <div class="col-span-2 text-center text-gray-400 py-6">Sedang mengambil produk dari Google Sheets...</div>
+                    <div class="col-span-2 text-center text-gray-400 py-6"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil produk...</div>
                 </div>
             </div>
 
@@ -70,7 +66,6 @@
                     <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">3</div>
                     <h3 class="font-bold">Pilih Pembayaran</h3>
                 </div>
-                <!-- Div QRIS Aktif Bawaan (Border Blue) -->
                 <div id="metode-qris" class="bg-gray-800 border-2 border-blue-500 rounded-xl p-4 flex justify-between items-center cursor-pointer transition">
                     <div class="flex items-center gap-3 pointer-events-none">
                         <i class="fas fa-qrcode text-2xl text-blue-400"></i>
@@ -79,7 +74,6 @@
                             <p class="text-xs text-gray-400">Bebas biaya admin</p>
                         </div>
                     </div>
-                    <!-- Radio Button Aktif (bg-blue-500) -->
                     <div id="radio-qris" class="w-5 h-5 rounded-full border-2 border-blue-500 bg-blue-500 flex items-center justify-center pointer-events-none transition">
                         <i class="fas fa-check text-[10px] text-white"></i>
                     </div>
@@ -98,32 +92,17 @@
             </button>
         </div>
 
-        <!-- Bottom Navigation Bar (Diubah menjadi Riwayat Transaksi) -->
+        <!-- Bottom Navigation Bar (LINK KE APPSHEET BAPAK) -->
         <nav class="fixed bottom-0 w-full max-w-md bg-gray-900/90 backdrop-blur-md border-t border-gray-800 p-2 flex justify-around items-center z-50">
             <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-gray-300">
                 <i class="fas fa-home text-lg"></i>
                 <span class="text-[10px] font-medium">Beranda</span>
             </a>
-            <button onclick="bukaRiwayat()" class="flex flex-col items-center gap-1 text-blue-500 transition">
+            <a href="https://www.appsheet.com/start/8dd1026d-03f4-47ae-97ec-420a918ad5af?platform=desktop#appName=DeKa_19-375649467&vss=H4sIAAAAAAAAA6XOsQrCMBgE4He5OU-QrYhDER20KMU4xOYvBNukNKlaQt7dVCvOxTEXvvsv4K7pcfCyuoGfw--1oREcQaAYOxLgAitrfG8bASawk-0n3OenrMwKgYh4YV_uyYGHRZr_dZtBKzJe15r6qWqCqWJm6XtCKZgJIkM7eHlt6L02kRhTVttqcKSOacjyAS4362cnjdpalRpr2TiKL630Rh1gAQAA&view=RIWAYAT" class="flex flex-col items-center gap-1 text-blue-500">
                 <i class="fas fa-history text-lg"></i>
                 <span class="text-[10px] font-medium">Riwayat Transaksi</span>
-            </button>
+            </a>
         </nav>
-
-        <!-- MODAL RIWAYAT TRANSAKSI (Sama seperti index.html) -->
-        <div id="modal-riwayat" class="fixed inset-0 bg-gray-900 z-[60] flex-col hidden transition-opacity duration-300">
-            <header class="flex items-center justify-between p-4 sticky top-0 bg-gray-900 border-b border-gray-800 shadow-md">
-                <div class="flex items-center gap-3">
-                    <button onclick="tutupRiwayat()" class="text-gray-400 hover:text-white active:scale-90 transition">
-                        <i class="fas fa-arrow-left text-xl"></i>
-                    </button>
-                    <h1 class="font-bold text-lg">Riwayat Transaksi</h1>
-                </div>
-            </header>
-            <div id="list-riwayat" class="flex-1 overflow-y-auto p-3 space-y-2 pb-10 bg-gray-900">
-                <!-- Akan dimuat oleh JS -->
-            </div>
-        </div>
 
     </div>
 
@@ -147,9 +126,8 @@
         let kodeProdukTerpilih = '';
         let namaProdukTerpilih = '';
         let hargaTerpilih = 0;
-        let pembayaranTerpilih = true; 
+        let pembayaranTerpilih = true;
 
-        // SANITASI NOMOR HP
         inputNomor.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, ''); 
             cekKelengkapan();
@@ -162,10 +140,8 @@
         function aturTampilanProvider(p) {
             judulHeader.innerText = "Isi " + p;
             namaProvider.innerText = p;
-
             let namaLower = p.toLowerCase();
             
-            // Logo disamakan dengan index.html yang lama Bapak, kecuali wallet
             if (namaLower.includes('telkomsel')) {
                 badgeLogo.className = "w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
                 badgeLogo.innerText = "T";
@@ -198,20 +174,16 @@
 
         async function ambilProduk() {
             aturTampilanProvider(providerTarget);
-          
             try {
                 const response = await fetch(`${webAppUrl}?action=getProducts&provider=${encodeURIComponent(providerTarget)}`); 
                 semuaProduk = await response.json();
             
                 if (semuaProduk.length === 0) {
-                    daftarProduk.innerHTML = `<div class="col-span-2 text-center text-gray-400 py-6">Tidak ada produk ${providerTarget} yang aktif.</div>`;
+                    daftarProduk.innerHTML = `<div class="col-span-2 text-center text-gray-400 py-6">Tidak ada produk yang aktif.</div>`;
                     return;
                 }
-
                 const isPln = providerTarget.toLowerCase().includes('pln');
-
                 if (isPln) {
-                    kategoriContainer.innerHTML = '';
                     kategoriContainer.style.display = 'none';
                     tampilkanProduk('Semua');
                 } else {
@@ -219,9 +191,7 @@
                     buatTabKategori();
                     tampilkanProduk('Semua');
                 }
-
             } catch (error) {
-                console.error('Error:', error);
                 daftarProduk.innerHTML = '<div class="col-span-2 text-center text-red-400 py-6">Gagal memuat produk dari server.</div>';
             }
         }
@@ -239,7 +209,6 @@
                 else if(kLower.includes('ovo')) icon = '<i class="fas fa-circle mr-1 text-purple-400"></i>';
                 else if(kLower.includes('gopay')) icon = '<i class="fas fa-motorcycle mr-1 text-green-400"></i>';
                 else if(kLower.includes('shopee')) icon = '<i class="fas fa-shopping-bag mr-1 text-orange-400"></i>';
-                else if(kLower.includes('link')) icon = '<i class="fas fa-link mr-1 text-red-400"></i>';
 
                 const btn = document.createElement('button');
                 btn.className = `btn-kategori whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center justify-center ${index === 0 ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 border border-gray-700 hover:text-white'}`;
@@ -252,38 +221,26 @@
                     this.className = 'btn-kategori whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center justify-center bg-blue-600 text-white';
                     tampilkanProduk(kat);
                 });
-
                 kategoriContainer.appendChild(btn);
             });
         }
 
         function tampilkanProduk(kategoriAktif) {
             daftarProduk.innerHTML = '';
-            const produkFilter = kategoriAktif === 'Semua' 
-                ? semuaProduk 
-                : semuaProduk.filter(p => p.kategori === kategoriAktif);
-
-            if (produkFilter.length === 0) {
-                daftarProduk.innerHTML = '<div class="col-span-2 text-center text-gray-400 py-6">Tidak ada produk di kategori ini.</div>';
-                return;
-            }
+            const produkFilter = kategoriAktif === 'Semua' ? semuaProduk : semuaProduk.filter(p => p.kategori === kategoriAktif);
 
             produkFilter.forEach(p => {
               const divProduk = document.createElement('div');
               divProduk.className = 'produk-item bg-gray-800 border border-gray-700 rounded-xl p-3 cursor-pointer transition flex flex-col justify-between';
-              
               divProduk.setAttribute('data-kode', p.kode);
               divProduk.setAttribute('data-nama', p.nama);
               divProduk.setAttribute('data-harga', p.harga);
-
               divProduk.innerHTML = `
                 <h4 class="font-bold text-sm text-gray-200 pointer-events-none mb-2 line-clamp-2">${p.nama}</h4>
                 <p class="text-sm text-blue-400 font-bold pointer-events-none">${formatRupiah(p.harga)}</p>
               `;
-
               daftarProduk.appendChild(divProduk);
             });
-
             aktifkanFungsiKlikProduk();
         }
 
@@ -305,104 +262,31 @@
                         el.classList.remove('border-blue-500', 'bg-gray-700');
                         el.classList.add('border-gray-700', 'bg-gray-800');
                     });
-                    
                     this.classList.remove('border-gray-700', 'bg-gray-800');
                     this.classList.add('border-blue-500', 'bg-gray-700');
-
                     kodeProdukTerpilih = this.getAttribute('data-kode');
                     namaProdukTerpilih = this.getAttribute('data-nama');
                     hargaTerpilih = parseInt(this.getAttribute('data-harga'));
                     teksTotalHarga.innerText = formatRupiah(hargaTerpilih);
-                    
                     cekKelengkapan();
                 });
             });
         }
 
-        // --- SISTEM MODAL RIWAYAT ---
-        function maskNomor(n) {
-            if (!n || n.length < 7) return n;
-            return n.substring(0, n.length - 5) + "***" + n.substring(n.length - 2);
-        }
-
-        function bukaRiwayat() {
-            document.getElementById('modal-riwayat').classList.remove('hidden');
-            document.getElementById('modal-riwayat').classList.add('flex');
-            muatRiwayat();
-        }
-
-        function tutupRiwayat() {
-            document.getElementById('modal-riwayat').classList.add('hidden');
-            document.getElementById('modal-riwayat').classList.remove('flex');
-        }
-
-        async function muatRiwayat() {
-            const listContainer = document.getElementById('list-riwayat');
-            listContainer.innerHTML = '<div class="text-center text-gray-500 py-10"><i class="fas fa-spinner fa-spin text-3xl mb-3"></i><p class="text-sm">Mengambil riwayat terbaru...</p></div>';
-            
-            try {
-                let res = await fetch(`${webAppUrl}?action=getProducts&sub_action=getRiwayat`);
-                let data = await res.json();
-
-                if (data.length === 0) {
-                    listContainer.innerHTML = '<div class="text-center text-gray-500 py-10">Belum ada transaksi.</div>';
-                    return;
-                }
-
-                listContainer.innerHTML = '';
-                
-                data.forEach(item => {
-                    let st = item.status ? item.status.toUpperCase() : 'PROSES';
-                    let bg = st === 'SUKSES' || st === 'SUCCESS' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : (st === 'GAGAL' || st === 'FAILED' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-blue-500/20 text-blue-400 border-blue-500/30');
-                    if(st === 'SUCCESS') st = 'SUKSES';
-                    if(st === 'FAILED') st = 'GAGAL';
-
-                    // BIKIN BISA DI KLIK
-                    let card = document.createElement('a');
-                    card.href = `bayar.html?id_trx=${item.id}&produk=${encodeURIComponent(item.produk)}&nomor=${encodeURIComponent(item.nomor)}&total_unik=${item.harga}`;
-                    card.className = "bg-gray-800 border border-gray-700 rounded-xl p-3 flex justify-between items-center transition hover:bg-gray-700 cursor-pointer block";
-                    
-                    card.innerHTML = `
-                        <div class="flex-1 pr-3">
-                            <h4 class="text-sm font-bold text-gray-200 truncate">${item.produk}</h4>
-                            <p class="text-xs text-gray-400 font-mono mt-0.5">${maskNomor(item.nomor)}</p>
-                            <p class="text-[10px] text-gray-500 mt-1"><i class="far fa-clock mr-1"></i>${item.tanggal}</p>
-                        </div>
-                        <div class="text-right flex flex-col items-end gap-1.5">
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${bg}">${st}</span>
-                            <span class="text-sm font-bold text-gray-300">${formatRupiah(item.harga)}</span>
-                        </div>
-                    `;
-                    listContainer.appendChild(card);
-                });
-            } catch (err) {
-                listContainer.innerHTML = '<div class="text-center text-red-400 py-10">Gagal mengambil riwayat. Silakan periksa koneksi Anda.</div>';
-            }
-        }
-
-        // KLIK TOMBOL PESAN SEKARANG
         tombolPesan.addEventListener('click', async function() {
             if (!this.classList.contains('cursor-not-allowed')) {
                 let nomorTujuan = inputNomor.value;
-                
-                // Generate ID TRX Acak 8 karakter
                 let idTrx = Math.random().toString(36).substring(2, 10).toUpperCase();
-                
-                // Generate Kode Unik Pembayaran (100-999)
                 let kodeUnik = Math.floor(Math.random() * 899) + 100;
                 let totalUnik = hargaTerpilih + kodeUnik;
 
-                // Tampilan tombol loading
                 tombolPesan.disabled = true;
                 tombolPesan.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
 
                 try {
-                    // Kirim Data Ke Google Sheets (Tab Transaksi)
                     let urlKirim = `${webAppUrl}?action=addTransaction&id_trx=${idTrx}&kode_produk=${encodeURIComponent(kodeProdukTerpilih)}&no_hp=${encodeURIComponent(nomorTujuan)}&total_bayar=${hargaTerpilih}&total_unik=${totalUnik}`;
-                    
                     await fetch(urlKirim);
 
-                    // Pindah ke Halaman Bayar (bayar.html) membawa detail pesanan
                     let paramBayar = `id_trx=${idTrx}&produk=${encodeURIComponent(namaProdukTerpilih)}&nomor=${encodeURIComponent(nomorTujuan)}&total_unik=${totalUnik}`;
                     window.location.href = `bayar.html?${paramBayar}`;
 
