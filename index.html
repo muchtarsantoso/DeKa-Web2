@@ -186,8 +186,10 @@
         }
 
         function maskNomor(n) {
-            if (!n || n.length < 7) return n;
-            return n.substring(0, n.length - 5) + "***" + n.substring(n.length - 2);
+            if (!n) return '-';
+            let strN = n.toString(); // Ubah paksa jadi teks (string) agar tidak error
+            if (strN.length < 7) return strN;
+            return strN.substring(0, strN.length - 5) + "***" + strN.substring(strN.length - 2);
         }
 
         function bukaRiwayat() {
