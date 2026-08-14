@@ -461,10 +461,7 @@
             }
         }
 
-        document.getElementById('btn-wa').addEventListener('click', function() {
-            let noWa = "628811168230";
-            let msg = `Halo DeKa Reload, saya ingin konfirmasi transfer via QRIS:\n\n*ID TRX:* ${idTrx}\n*Produk:* ${produk}\n*Nomor Tujuan:* ${nomor}\n*Total Transfer:* ${formatRupiah(totalUnik)}`;
-            window.open(`https://wa.me/${noWa}?text=${encodeURIComponent(msg)}`, '_blank');
+        
         });
     </script>
 </body>
