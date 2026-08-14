@@ -240,7 +240,14 @@
                     listContainer.appendChild(card);
                 });
             } catch (err) {
-                listContainer.innerHTML = '<div class="text-center text-red-400 py-10">Gagal mengambil riwayat. Silakan periksa koneksi Anda.</div>';
+                // Kode ini akan memunculkan error aslinya ke layar Bapak
+                console.error(err);
+                listContainer.innerHTML = `
+                    <div class="text-center text-red-400 py-10 px-4">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-2"></i>
+                        <p class="text-sm font-bold">Error Terdeteksi:</p>
+                        <p class="text-xs break-words font-mono mt-2 bg-gray-800 p-2 rounded text-left text-red-300 border border-red-500/30">${err.message || err}</p>
+                    </div>`;
             }
         }
     </script>
