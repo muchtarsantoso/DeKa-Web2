@@ -396,10 +396,6 @@
             }
         }
         
-        // Langsung cek status seketika halaman dibuka agar tidak kedap-kedip
-        cekStatusTransaksi(); 
-        
-        // Lalu jalankan perulangan tiap 5 detik untuk pembaruan selanjutnya
         statusInterval = setInterval(cekStatusTransaksi, 5000);
 
         function maskNomor(n) {
