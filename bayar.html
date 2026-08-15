@@ -48,7 +48,7 @@
             <p class="text-sm text-gray-400 font-medium tracking-wide">Memeriksa status pesanan...</p>
         </div>
 
-        <!-- CONTAINER UTAMA (Instruksi QRIS) - Disembunyikan di awal -->
+        <!-- CONTAINER UTAMA (Instruksi QRIS) -->
         <main id="main-content" class="hidden p-4 space-y-5 flex-1 pb-24">
 
             <!-- Status Badge Banner -->
@@ -86,7 +86,6 @@
 
             <!-- KOTAK QRIS DAN INSTRUKSI -->
             <div id="instruksi-pembayaran" class="space-y-5 transition-all duration-500">
-                <!-- Card QRIS -->
                 <div class="bg-gray-800/80 border border-gray-700/80 rounded-2xl p-5 flex flex-col items-center justify-center shadow-lg">
                     <div class="flex items-center gap-2 mb-3">
                         <i class="fas fa-qrcode text-blue-400 text-base"></i>
@@ -102,7 +101,6 @@
                     </p>
                 </div>
 
-                <!-- Cara Pembayaran Praktis -->
                 <div class="bg-gray-800/40 border border-gray-700/60 rounded-2xl p-4 text-xs space-y-2.5">
                     <h3 class="font-bold text-gray-200 text-xs border-b border-gray-700/60 pb-2 flex items-center gap-2">
                         <i class="fas fa-mobile-alt text-blue-400"></i> Cara Bayar dari HP yang sama:
@@ -174,7 +172,7 @@
             </div>
         </main>
 
-        <!-- UI STRUK PROFESIONAL (Ditampilkan HANYA saat status SUKSES) -->
+        <!-- UI STRUK PROFESIONAL -->
         <div id="struk-container" class="hidden flex-1 p-4 flex flex-col items-center justify-center pb-24">
             <div class="bg-white text-gray-800 w-full max-w-sm rounded-xl shadow-2xl relative animate-struk">
                 <div class="bg-emerald-500 text-white text-center p-6 rounded-t-xl relative overflow-hidden">
@@ -202,7 +200,6 @@
                             <span class="font-bold text-gray-800 font-mono" id="struk-nomor">-</span>
                         </div>
                         
-                        <!-- BLOK KETERANGAN / TOKEN PLN -->
                         <div id="blok-keterangan" class="hidden flex-col items-center bg-blue-50 border border-blue-200 p-3 rounded-lg my-2 text-center">
                             <span class="text-[10px] text-blue-500 uppercase font-bold tracking-wider mb-1">KETERANGAN / TOKEN PLN</span>
                             <span class="font-extrabold text-gray-900 font-mono text-lg leading-tight break-all" id="struk-keterangan">-</span>
@@ -246,7 +243,7 @@
             </button>
         </nav>
 
-        <!-- MODAL RIWAYAT TRANSAKSI -->
+        <!-- MODAL RIWAYAT -->
         <div id="modal-riwayat" class="fixed inset-0 bg-gray-900 z-[60] flex-col hidden transition-opacity duration-300">
             <header class="flex items-center justify-between p-4 sticky top-0 bg-gray-900 border-b border-gray-800 shadow-md">
                 <div class="flex items-center gap-3">
@@ -257,13 +254,13 @@
                 </div>
             </header>
             <div id="list-riwayat" class="flex-1 overflow-y-auto p-3 space-y-2 pb-10 bg-gray-900">
-                <!-- Akan dimuat oleh JS -->
+                <!-- Diisi JS -->
             </div>
         </div>
 
     </div>
 
-    <!-- SCRIPT LOGIKA -->
+    <!-- SCRIPT -->
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         
@@ -271,24 +268,22 @@
         const produk = urlParams.get('produk') || '-';
         const nomor = urlParams.get('nomor') || '-';
         const totalUnik = parseInt(urlParams.get('total_unik')) || 0;
-
-        // PASTIKAN URL INI MILIK BAPAK!
+        const providerUrl = urlParams.get('provider') || '';
+        
         const webAppUrl = "https://script.google.com/macros/s/AKfycbwVdzWWQZ8o1cUYnnWgmexuCOMl9wL2iw-l0GxPtkzvOGEKczoXgcmSqBcsKZUGrmDKiA/exec";
 
         function formatRupiah(angka) {
             return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
-        // --- SET DATA AWAL RINCIAN PESANAN ---
         document.getElementById('nominal-tf').innerText = formatRupiah(totalUnik);
-        document.getElementById('detail-produk').innerText = produk;
+        document.getElementById('detail-produk').innerText = decodeURIComponent(produk);
         document.getElementById('detail-nomor').innerText = nomor;
         document.getElementById('detail-total-akhir').innerText = formatRupiah(totalUnik);
         document.getElementById('detail-idtrx').innerText = idTrx;
         document.getElementById('detail-sn').innerText = 'Menunggu...'; 
         
-        // Ekstrak Provider dari Nama Produk (Ambil kata pertama)
-        let namaProvider = produk !== '-' ? produk.split(' ')[0] : '-';
+        let namaProvider = providerUrl !== '' ? decodeURIComponent(providerUrl) : '-';
         document.getElementById('detail-provider').innerText = namaProvider;
 
         function salinNominal() {
@@ -318,15 +313,12 @@
                 const boxQris = document.getElementById('instruksi-pembayaran');
                 const cardNominal = document.getElementById('card-nominal-transfer');
                 
-                // Elemen Kontrol UI
                 const loadingScreen = document.getElementById('loading-screen');
                 const mainContent = document.getElementById('main-content');
                 const strukContainer = document.getElementById('struk-container');
 
-                // Hilangkan layar loading karena data sudah diterima
                 if(loadingScreen) loadingScreen.classList.add('hidden');
 
-                // Update Tanggal di Rincian Pesanan
                 let tglTampil = '-'; 
                 try {
                     if(data.tanggal) {
@@ -343,12 +335,10 @@
                 } catch(e) {}
                 document.getElementById('detail-tanggal').innerText = tglTampil;
 
-                // Update SN di Rincian Pesanan
                 if(data.sn && data.sn.trim() !== '' && data.sn !== '#N/A') {
                     document.getElementById('detail-sn').innerText = data.sn;
                 }
 
-                // --- LOGIKA STATUS TRANSAKSI ---
                 if (statusInfo === 'PROSES' || statusInfo === 'DIPROSES') {
                     if(boxQris) boxQris.classList.add('hidden'); 
                     if(cardNominal) cardNominal.classList.add('hidden'); 
@@ -360,8 +350,7 @@
                     icon.className = 'fas fa-cog fa-spin';
                     badgeMini.className = 'text-[10px] bg-blue-500/20 text-blue-300 font-bold px-2.5 py-1 rounded-lg border border-blue-500/30';
                     badgeMini.innerText = 'Processing';
-                    
-                    mainContent.classList.remove('hidden'); // Munculkan instruksi
+                    mainContent.classList.remove('hidden');
                 } 
                 else if (statusInfo === 'GAGAL' || statusInfo === 'FAILED') {
                     if(boxQris) boxQris.classList.add('hidden'); 
@@ -374,25 +363,23 @@
                     icon.className = 'fas fa-times';
                     badgeMini.className = 'text-[10px] bg-red-500/20 text-red-300 font-bold px-2.5 py-1 rounded-lg border border-red-500/30';
                     badgeMini.innerText = 'Failed';
-                    
-                    mainContent.classList.remove('hidden'); // Munculkan instruksi
+                    mainContent.classList.remove('hidden');
                     clearInterval(statusInterval);
                 }
                 else if (statusInfo === 'SUKSES' || statusInfo === 'SUCCESS') {
-                    mainContent.classList.add('hidden'); // Sembunyikan halaman instruksi QRIS
-                    
-                    strukContainer.classList.remove('hidden'); // Munculkan struk
+                    mainContent.classList.add('hidden');
+                    strukContainer.classList.remove('hidden');
                     strukContainer.classList.add('flex');
                     document.getElementById('header-title').innerText = 'Detail Transaksi';
                     
                     document.getElementById('struk-tanggal').innerText = tglTampil; 
-                    document.getElementById('struk-produk').innerText = produk;
+                    document.getElementById('struk-produk').innerText = decodeURIComponent(produk);
                     document.getElementById('struk-nomor').innerText = nomor;
                     document.getElementById('struk-id').innerText = idTrx;
                     document.getElementById('struk-sn').innerText = data.sn || '-';
                     document.getElementById('struk-total').innerText = formatRupiah(totalUnik);
 
-                    let pLower = produk.toLowerCase();
+                    let pLower = decodeURIComponent(produk).toLowerCase();
                     if(pLower.includes("pln") || pLower.includes("token")) {
                         document.getElementById('blok-keterangan').classList.remove('hidden');
                         document.getElementById('blok-keterangan').classList.add('flex');
@@ -402,30 +389,22 @@
                     clearInterval(statusInterval);
                 } 
                 else {
-                    // Jika status masih MENUNGGU PEMBAYARAN
                     if(boxQris) boxQris.classList.remove('hidden');
                     if(cardNominal) cardNominal.classList.remove('hidden');
-                    mainContent.classList.remove('hidden'); // Munculkan halaman QRIS
+                    mainContent.classList.remove('hidden');
                 }
-
             } catch(e) {
-                console.log("Cek status berjalan...", e);
-                // Jika error/offline, sembunyikan loading & tampilkan konten default agar tidak freeze
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('main-content').classList.remove('hidden');
             }
         }
         
-        // Panggil langsung fungsi seketika halaman dibuka agar status cepat tampil
         cekStatusTransaksi();
-        
-        // Cek ulang setiap 5 detik secara otomatis
         statusInterval = setInterval(cekStatusTransaksi, 5000);
 
-        // --- FUNGSI MODAL RIWAYAT ---
         function maskNomor(n) {
             if (!n) return '-';
-            let strN = n.toString(); // Pastikan diubah ke teks agar terhindar dari error 'substring is not a function'
+            let strN = n.toString();
             if (strN.length < 7) return strN;
             return strN.substring(0, strN.length - 5) + "***" + strN.substring(strN.length - 2);
         }
@@ -462,13 +441,17 @@
                     if(st === 'SUCCESS') st = 'SUKSES';
                     if(st === 'FAILED') st = 'GAGAL';
 
+                    // Data nama produk & provider langsung diambil dari hasil mapping backend!
+                    let namaProd = item.produk || '-';
+                    let prov = item.provider || '-';
+
                     let card = document.createElement('a');
-                    card.href = `bayar.html?id_trx=${item.id}&produk=${encodeURIComponent(item.produk)}&nomor=${encodeURIComponent(item.nomor)}&total_unik=${item.harga}`;
+                    card.href = `bayar.html?id_trx=${item.id}&produk=${encodeURIComponent(namaProd)}&nomor=${encodeURIComponent(item.nomor)}&total_unik=${item.harga}&provider=${encodeURIComponent(prov)}`;
                     card.className = "bg-gray-800 border border-gray-700 rounded-xl p-3 flex justify-between items-center transition hover:bg-gray-700 cursor-pointer block";
                     
                     card.innerHTML = `
                         <div class="flex-1 pr-3">
-                            <h4 class="text-sm font-bold text-gray-200 truncate">${item.produk}</h4>
+                            <h4 class="text-sm font-bold text-gray-200 truncate">${namaProd}</h4>
                             <p class="text-xs text-gray-400 font-mono mt-0.5">${maskNomor(item.nomor)}</p>
                             <p class="text-[10px] text-gray-500 mt-1"><i class="far fa-clock mr-1"></i>${item.tanggal}</p>
                         </div>
