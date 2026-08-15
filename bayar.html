@@ -35,15 +35,21 @@
                 <a href="index.html" class="text-gray-400 hover:text-white transition">
                     <i class="fas fa-arrow-left text-lg"></i>
                 </a>
-                <h1 class="font-bold text-base" id="header-title">Instruksi Pembayaran</h1>
+                <h1 class="font-bold text-base" id="header-title">Detail Transaksi</h1>
             </div>
             <button onclick="window.location.reload();" class="text-gray-400 hover:text-white transition">
                 <i class="fas fa-sync-alt text-base"></i>
             </button>
         </header>
 
-        <!-- CONTAINER UTAMA -->
-        <main id="main-content" class="p-4 space-y-5 flex-1 pb-24">
+        <!-- LAYAR LOADING SEMENTARA -->
+        <div id="loading-screen" class="flex-1 flex flex-col items-center justify-center min-h-[60vh]">
+            <i class="fas fa-circle-notch fa-spin text-4xl text-blue-500 mb-4"></i>
+            <p class="text-sm text-gray-400 font-medium tracking-wide">Memeriksa status pesanan...</p>
+        </div>
+
+        <!-- CONTAINER UTAMA (Instruksi QRIS) - Disembunyikan di awal -->
+        <main id="main-content" class="hidden p-4 space-y-5 flex-1 pb-24">
 
             <!-- Status Badge Banner -->
             <div id="status-banner" class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex items-center justify-between shadow-lg">
@@ -78,7 +84,7 @@
                 </div>
             </div>
 
-            <!-- KOTAK QRIS DAN INSTRUKSI (Akan di-hide saat PROSES) -->
+            <!-- KOTAK QRIS DAN INSTRUKSI -->
             <div id="instruksi-pembayaran" class="space-y-5 transition-all duration-500">
                 <!-- Card QRIS -->
                 <div class="bg-gray-800/80 border border-gray-700/80 rounded-2xl p-5 flex flex-col items-center justify-center shadow-lg">
@@ -122,7 +128,7 @@
                 </div>
             </div>
 
-            <!-- Detail Rincian Pesanan (Ditambahkan Tanggal, Provider, SN) -->
+            <!-- Detail Rincian Pesanan -->
             <div class="bg-gray-800 border border-gray-700 rounded-2xl p-4 space-y-3 text-xs shadow-md">
                 <h3 class="font-bold text-gray-200 border-b border-gray-700 pb-2 flex items-center gap-2">
                     <i class="fas fa-file-invoice text-blue-400"></i> Detail Rincian Pesanan
@@ -166,14 +172,6 @@
                     <span id="detail-total-akhir" class="font-extrabold text-blue-400 text-sm">-</span>
                 </div>
             </div>
-
-            <!-- Tombol Konfirmasi WA -->
-            <div class="pt-2">
-                <button id="btn-wa" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2 text-xs active:scale-95">
-                    <i class="fab fa-whatsapp text-lg"></i> Konfirmasi Pembayaran ke WA Admin
-                </button>
-            </div>
-
         </main>
 
         <!-- UI STRUK PROFESIONAL (Ditampilkan HANYA saat status SUKSES) -->
@@ -319,6 +317,14 @@
                 const badgeMini = document.getElementById('status-badge-mini');
                 const boxQris = document.getElementById('instruksi-pembayaran');
                 const cardNominal = document.getElementById('card-nominal-transfer');
+                
+                // Elemen Kontrol UI
+                const loadingScreen = document.getElementById('loading-screen');
+                const mainContent = document.getElementById('main-content');
+                const strukContainer = document.getElementById('struk-container');
+
+                // Hilangkan layar loading karena data sudah diterima
+                if(loadingScreen) loadingScreen.classList.add('hidden');
 
                 // Update Tanggal di Rincian Pesanan
                 let tglTampil = '-'; 
@@ -344,8 +350,8 @@
 
                 // --- LOGIKA STATUS TRANSAKSI ---
                 if (statusInfo === 'PROSES' || statusInfo === 'DIPROSES') {
-                    if(boxQris) boxQris.classList.add('hidden'); // Sembunyikan QRIS
-                    if(cardNominal) cardNominal.classList.add('hidden'); // Sembunyikan Kotak Transfer Nominal
+                    if(boxQris) boxQris.classList.add('hidden'); 
+                    if(cardNominal) cardNominal.classList.add('hidden'); 
                     
                     txtStatus.innerText = 'SEDANG DIPROSES';
                     txtStatus.className = 'text-xs font-bold text-blue-300 uppercase';
@@ -354,10 +360,12 @@
                     icon.className = 'fas fa-cog fa-spin';
                     badgeMini.className = 'text-[10px] bg-blue-500/20 text-blue-300 font-bold px-2.5 py-1 rounded-lg border border-blue-500/30';
                     badgeMini.innerText = 'Processing';
+                    
+                    mainContent.classList.remove('hidden'); // Munculkan instruksi
                 } 
                 else if (statusInfo === 'GAGAL' || statusInfo === 'FAILED') {
-                    if(boxQris) boxQris.classList.add('hidden'); // Sembunyikan QRIS
-                    if(cardNominal) cardNominal.classList.add('hidden'); // Sembunyikan Kotak Transfer Nominal
+                    if(boxQris) boxQris.classList.add('hidden'); 
+                    if(cardNominal) cardNominal.classList.add('hidden'); 
 
                     txtStatus.innerText = 'TRANSAKSI GAGAL';
                     txtStatus.className = 'text-xs font-bold text-red-300 uppercase';
@@ -366,12 +374,15 @@
                     icon.className = 'fas fa-times';
                     badgeMini.className = 'text-[10px] bg-red-500/20 text-red-300 font-bold px-2.5 py-1 rounded-lg border border-red-500/30';
                     badgeMini.innerText = 'Failed';
+                    
+                    mainContent.classList.remove('hidden'); // Munculkan instruksi
                     clearInterval(statusInterval);
                 }
                 else if (statusInfo === 'SUKSES' || statusInfo === 'SUCCESS') {
-                    document.getElementById('main-content').classList.add('hidden');
-                    document.getElementById('struk-container').classList.remove('hidden');
-                    document.getElementById('struk-container').classList.add('flex');
+                    mainContent.classList.add('hidden'); // Sembunyikan halaman instruksi QRIS
+                    
+                    strukContainer.classList.remove('hidden'); // Munculkan struk
+                    strukContainer.classList.add('flex');
                     document.getElementById('header-title').innerText = 'Detail Transaksi';
                     
                     document.getElementById('struk-tanggal').innerText = tglTampil; 
@@ -389,18 +400,34 @@
                     }
 
                     clearInterval(statusInterval);
+                } 
+                else {
+                    // Jika status masih MENUNGGU PEMBAYARAN
+                    if(boxQris) boxQris.classList.remove('hidden');
+                    if(cardNominal) cardNominal.classList.remove('hidden');
+                    mainContent.classList.remove('hidden'); // Munculkan halaman QRIS
                 }
 
             } catch(e) {
                 console.log("Cek status berjalan...", e);
+                // Jika error/offline, sembunyikan loading & tampilkan konten default agar tidak freeze
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
             }
         }
         
+        // Panggil langsung fungsi seketika halaman dibuka agar status cepat tampil
+        cekStatusTransaksi();
+        
+        // Cek ulang setiap 5 detik secara otomatis
         statusInterval = setInterval(cekStatusTransaksi, 5000);
 
+        // --- FUNGSI MODAL RIWAYAT ---
         function maskNomor(n) {
-            if (!n || n.length < 7) return n;
-            return n.substring(0, n.length - 5) + "***" + n.substring(n.length - 2);
+            if (!n) return '-';
+            let strN = n.toString(); // Pastikan diubah ke teks agar terhindar dari error 'substring is not a function'
+            if (strN.length < 7) return strN;
+            return strN.substring(0, strN.length - 5) + "***" + strN.substring(strN.length - 2);
         }
 
         function bukaRiwayat() {
@@ -456,12 +483,6 @@
                 listContainer.innerHTML = '<div class="text-center text-red-400 py-10">Gagal mengambil riwayat. Silakan periksa koneksi Anda.</div>';
             }
         }
-
-        document.getElementById('btn-wa').addEventListener('click', function() {
-            let noWa = "628811168230";
-            let msg = `Halo DeKa Reload, saya ingin konfirmasi transfer via QRIS:\n\n*ID TRX:* ${idTrx}\n*Produk:* ${produk}\n*Nomor Tujuan:* ${nomor}\n*Total Transfer:* ${formatRupiah(totalUnik)}`;
-            window.open(`https://wa.me/${noWa}?text=${encodeURIComponent(msg)}`, '_blank');
-        });
     </script>
 </body>
 </html>
