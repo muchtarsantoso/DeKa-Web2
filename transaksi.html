@@ -24,10 +24,11 @@
             <h1 id="judul-header" class="font-bold text-lg">Isi Produk</h1>
         </header>
 
-        <!-- Info Provider Dinamis -->
+        <!-- Info Provider Dinamis (Update Pakai Gambar) -->
         <div class="p-4 flex items-center gap-4 bg-gray-800 border-b border-gray-700">
-            <div id="badge-logo" class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white">
-                T
+            <div id="badge-logo" class="w-16 h-16 bg-gray-800 border border-gray-700 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden">
+                <!-- Gambar akan diisi oleh Javascript -->
+                <i class="fas fa-spinner fa-spin text-gray-400"></i>
             </div>
             <div>
                 <h2 id="nama-provider" class="font-bold text-xl">Memuat...</h2>
@@ -167,35 +168,32 @@
             namaProvider.innerText = p;
 
             let namaLower = p.toLowerCase();
+            let imgSrc = "";
             
+            // Pencocokan gambar logo sesuai link Google Drive yang diberikan di beranda
             if (namaLower.includes('telkomsel')) {
-                badgeLogo.className = "w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
-                badgeLogo.innerText = "T";
+                imgSrc = "https://lh3.googleusercontent.com/d/1Z-ZQuFff3Ty1iGaiY-U13R-sL6Yy1J7t";
             } else if (namaLower.includes('indosat')) {
-                badgeLogo.className = "w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-black";
-                badgeLogo.innerText = "I";
+                imgSrc = "https://lh3.googleusercontent.com/d/1WJ7ZccDWmHxvHV5ZFxxdLXEqITYYR3zf";
             } else if (namaLower.includes('by.u') || namaLower.includes('byu')) {
-                badgeLogo.className = "w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
-                badgeLogo.innerText = "B";
+                imgSrc = "https://lh3.googleusercontent.com/d/1AwUwRBsjlBayp5lDhko1yPA9IXYHyHVd";
             } else if (namaLower.includes('xl')) {
-                badgeLogo.className = "w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
-                badgeLogo.innerText = "XL";
+                imgSrc = "https://lh3.googleusercontent.com/d/1CWc5DlujKGcijDWRzNKRsgdByemL6JuO";
             } else if (namaLower.includes('axis')) {
-                badgeLogo.className = "w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
-                badgeLogo.innerText = "AX";
-            } else if (namaLower.includes('tri')) {
-                badgeLogo.className = "w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
-                badgeLogo.innerText = "3";
-            } else if (namaLower.includes('pln')) {
-                badgeLogo.className = "w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-black";
-                badgeLogo.innerHTML = '<i class="fas fa-bolt"></i>';
-            } else if (namaLower.includes('wallet')) {
-                badgeLogo.className = "w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
-                badgeLogo.innerHTML = '<i class="fas fa-wallet"></i>';
+                imgSrc = "https://lh3.googleusercontent.com/d/1IrFIrT35QEJx6NPsHdsSnbDkjFHS5R83";
+            } else if (namaLower.includes('tri') || namaLower === '3') {
+                imgSrc = "https://lh3.googleusercontent.com/d/1xLOcIFwS-E5cpw7TxRGlouV7cOZqUHC8";
+            } else if (namaLower.includes('smartfren')) {
+                imgSrc = "https://lh3.googleusercontent.com/d/1cWa6gihDQaBJYNfjFdnOujiIweoeZp2l";
+            } else if (namaLower.includes('pln') || namaLower.includes('token')) {
+                imgSrc = "https://lh3.googleusercontent.com/d/1tyTu0mvaYjKG1ZgPF750mOBAKM6qpHzS";
+            } else if (namaLower.includes('wallet') || namaLower.includes('dana') || namaLower.includes('ovo')) {
+                imgSrc = "https://lh3.googleusercontent.com/d/15ja1tqi18l__WEiSYn8VB-D8SDeWeauo";
             } else {
-                badgeLogo.className = "w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center shadow-lg font-bold text-2xl text-white";
-                badgeLogo.innerText = p.charAt(0).toUpperCase();
+                imgSrc = "logo.png"; // Fallback default
             }
+
+            badgeLogo.innerHTML = `<img src="${imgSrc}" alt="${p}" class="w-full h-full object-cover">`;
         }
 
         async function ambilProduk() {

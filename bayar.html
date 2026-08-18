@@ -23,6 +23,9 @@
             background-repeat: repeat-x;
             background-position: top;
         }
+        /* Hilangkan panah spinner pada input number */
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex justify-center min-h-screen">
@@ -192,6 +195,10 @@
                     
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between items-start gap-2">
+                            <span class="text-gray-500">Provider</span>
+                            <span class="font-bold text-gray-800 text-right" id="struk-provider">-</span>
+                        </div>
+                        <div class="flex justify-between items-start gap-2">
                             <span class="text-gray-500">Produk</span>
                             <span class="font-bold text-gray-800 text-right" id="struk-produk">-</span>
                         </div>
@@ -200,10 +207,13 @@
                             <span class="font-bold text-gray-800 font-mono" id="struk-nomor">-</span>
                         </div>
                         
+                        <!-- KETERANGAN KHUSUS TOKEN PLN BOLD -->
                         <div id="blok-keterangan" class="hidden flex-col items-center bg-blue-50 border border-blue-200 p-3 rounded-lg my-2 text-center">
-                            <span class="text-[10px] text-blue-500 uppercase font-bold tracking-wider mb-1">KETERANGAN / TOKEN PLN</span>
+                            <span class="text-[10px] text-blue-500 uppercase font-bold tracking-wider mb-1">TOKEN PLN</span>
                             <span class="font-extrabold text-gray-900 font-mono text-lg leading-tight break-all" id="struk-keterangan">-</span>
                         </div>
+
+                        <!-- Baris Keterangan Umum Dihapus dari sini -->
 
                         <div class="flex justify-between items-center">
                             <span class="text-gray-500">ID TRX</span>
@@ -255,6 +265,31 @@
             </header>
             <div id="list-riwayat" class="flex-1 overflow-y-auto p-3 space-y-2 pb-10 bg-gray-900">
                 <!-- Diisi JS -->
+            </div>
+        </div>
+
+        <!-- MODAL PASSWORD VERIFIKASI -->
+        <div id="modal-password" class="fixed inset-0 bg-gray-900/95 z-[70] hidden flex-col items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+            <div class="bg-gray-800 border border-gray-700 rounded-2xl p-6 w-full max-w-sm shadow-2xl text-center relative animate-struk">
+                <button onclick="tutupPassword()" class="absolute top-3 right-4 text-gray-400 hover:text-white text-lg"><i class="fas fa-times"></i></button>
+                
+                <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
+                    <i class="fas fa-lock text-2xl text-blue-400"></i>
+                </div>
+                
+                <h3 class="font-bold text-lg text-white mb-1">Verifikasi Keamanan</h3>
+                <p class="text-[11px] text-gray-400 mb-4 leading-relaxed">Demi privasi, masukkan <b class="text-blue-400">3 Angka yang disensor</b> dari nomor tujuan untuk membuka halaman ini.</p>
+
+                <!-- Menampilkan Petunjuk Nomor -->
+                <div class="bg-gray-900 p-3 rounded-xl border border-gray-700 mb-5 font-mono text-sm text-gray-300 flex items-center justify-center gap-2" id="teks-petunjuk-password">
+                    <!-- Format: 0858201 *** 98 -->
+                </div>
+
+                <input type="number" id="input-password" class="w-full bg-gray-900 border border-gray-600 text-center text-2xl font-bold text-white rounded-xl p-3 mb-2 focus:outline-none focus:border-blue-500 tracking-[0.5em]" placeholder="•••" maxlength="3" oninput="if(this.value.length > 3) this.value = this.value.slice(0,3);">
+                
+                <p id="error-password" class="text-[11px] text-red-400 font-bold h-4 mb-3"></p>
+
+                <button onclick="cekPassword()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition shadow-lg active:scale-95">Buka Transaksi</button>
             </div>
         </div>
 
@@ -324,10 +359,8 @@
                     if(data.tanggal) {
                         let d = new Date(data.tanggal);
                         if (!isNaN(d)) {
-                            tglTampil = d.toLocaleString('id-ID', {
-                                day: '2-digit', month: 'short', year: 'numeric', 
-                                hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta'
-                            }) + ' WIB';
+                            let formatOptions = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' };
+                            tglTampil = d.toLocaleString('id-ID', formatOptions).replace(/\./g, ':') + ' WIB';
                         } else {
                             tglTampil = data.tanggal;
                         }
@@ -373,6 +406,7 @@
                     document.getElementById('header-title').innerText = 'Detail Transaksi';
                     
                     document.getElementById('struk-tanggal').innerText = tglTampil; 
+                    document.getElementById('struk-provider').innerText = namaProvider;
                     document.getElementById('struk-produk').innerText = decodeURIComponent(produk);
                     document.getElementById('struk-nomor').innerText = nomor;
                     document.getElementById('struk-id').innerText = idTrx;
@@ -409,6 +443,67 @@
             return strN.substring(0, strN.length - 5) + "***" + strN.substring(strN.length - 2);
         }
 
+        // ==========================================
+        // FITUR KEAMANAN PASSWORD TRANSAKSI
+        // ==========================================
+        let targetUrlPass = "";
+        let correctPass = "";
+
+        function bukaPassword(fullNomor, targetUrl) {
+            targetUrlPass = targetUrl;
+            let strN = fullNomor.toString().trim();
+
+            if(strN.length < 7) {
+                window.location.href = targetUrl;
+                return;
+            }
+
+            let prefix = strN.substring(0, strN.length - 5);
+            let suffix = strN.substring(strN.length - 2);
+            correctPass = strN.substring(strN.length - 5, strN.length - 2);
+
+            document.getElementById('teks-petunjuk-password').innerHTML = `
+                <span>${prefix}</span>
+                <span class="text-blue-400 font-bold tracking-[0.2em] px-1">***</span>
+                <span>${suffix}</span>
+            `;
+            
+            document.getElementById('input-password').value = '';
+            document.getElementById('error-password').innerText = '';
+
+            document.getElementById('modal-password').classList.remove('hidden');
+            document.getElementById('modal-password').classList.add('flex');
+            setTimeout(() => document.getElementById('input-password').focus(), 100);
+        }
+
+        function tutupPassword() {
+            document.getElementById('modal-password').classList.add('hidden');
+            document.getElementById('modal-password').classList.remove('flex');
+        }
+
+        function cekPassword() {
+            let val = document.getElementById('input-password').value;
+            if(val === correctPass) {
+                window.location.href = targetUrlPass;
+            } else {
+                document.getElementById('error-password').innerText = 'Kode Salah! Masukkan 3 angka tengah yang disensor.';
+            }
+        }
+
+        // ==========================================
+        // RIWAYAT TRANSAKSI
+        // ==========================================
+        function formatTanggalIndo(dateStr) {
+            try {
+                let d = new Date(dateStr);
+                if (isNaN(d)) return dateStr;
+                let formatOptions = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' };
+                return d.toLocaleString('id-ID', formatOptions).replace(/\./g, ':') + ' WIB';
+            } catch(e) {
+                return dateStr;
+            }
+        }
+
         function bukaRiwayat() {
             document.getElementById('modal-riwayat').classList.remove('hidden');
             document.getElementById('modal-riwayat').classList.add('flex');
@@ -441,19 +536,21 @@
                     if(st === 'SUCCESS') st = 'SUKSES';
                     if(st === 'FAILED') st = 'GAGAL';
 
-                    // Data nama produk & provider langsung diambil dari hasil mapping backend!
                     let namaProd = item.produk || '-';
                     let prov = item.provider || '-';
+                    let tglCantik = formatTanggalIndo(item.tanggal); 
 
-                    let card = document.createElement('a');
-                    card.href = `bayar.html?id_trx=${item.id}&produk=${encodeURIComponent(namaProd)}&nomor=${encodeURIComponent(item.nomor)}&total_unik=${item.harga}&provider=${encodeURIComponent(prov)}`;
-                    card.className = "bg-gray-800 border border-gray-700 rounded-xl p-3 flex justify-between items-center transition hover:bg-gray-700 cursor-pointer block";
+                    let targetUrl = `bayar.html?id_trx=${item.id}&produk=${encodeURIComponent(namaProd)}&nomor=${encodeURIComponent(item.nomor)}&total_unik=${item.harga}&provider=${encodeURIComponent(prov)}`;
+
+                    let card = document.createElement('div'); 
+                    card.className = "bg-gray-800 border border-gray-700 rounded-xl p-3 flex justify-between items-center transition hover:bg-gray-700 cursor-pointer block mb-2";
+                    card.setAttribute("onclick", `bukaPassword('${item.nomor}', '${targetUrl}')`);
                     
                     card.innerHTML = `
                         <div class="flex-1 pr-3">
                             <h4 class="text-sm font-bold text-gray-200 truncate">${namaProd}</h4>
                             <p class="text-xs text-gray-400 font-mono mt-0.5">${maskNomor(item.nomor)}</p>
-                            <p class="text-[10px] text-gray-500 mt-1"><i class="far fa-clock mr-1"></i>${item.tanggal}</p>
+                            <p class="text-[10px] text-gray-500 mt-1"><i class="far fa-clock mr-1"></i>${tglCantik}</p>
                         </div>
                         <div class="text-right flex flex-col items-end gap-1.5">
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${bg}">${st}</span>
