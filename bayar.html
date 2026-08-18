@@ -213,8 +213,6 @@
                             <span class="font-extrabold text-gray-900 font-mono text-lg leading-tight break-all" id="struk-keterangan">-</span>
                         </div>
 
-                        <!-- Baris Keterangan Umum Dihapus dari sini -->
-
                         <div class="flex justify-between items-center">
                             <span class="text-gray-500">ID TRX</span>
                             <span class="font-bold text-gray-800 font-mono" id="struk-id">-</span>
@@ -368,9 +366,38 @@
                 } catch(e) {}
                 document.getElementById('detail-tanggal').innerText = tglTampil;
 
-                if(data.sn && data.sn.trim() !== '' && data.sn !== '#N/A') {
-                    document.getElementById('detail-sn').innerText = data.sn;
+                // ========================================================
+                // LOGIKA CERDAS: EKSTRAK SN LANGSUNG DARI JAVASCRIPT
+                // ========================================================
+                let finalSN = '-';
+                // Ambil data teks sumber (bisa dari kolom Keterangan atau SN)
+                let teksSumber = data.keterangan || data.sn || "";
+
+                if (teksSumber && teksSumber !== '#N/A' && teksSumber !== '-') {
+                    // Coba Pola 1: Mencari tulisan "SN: (kode_sn) Saldo" atau "hrg"
+                    let match1 = teksSumber.match(/SN:\s*(.*?)\s*(?:Saldo|hrg)/i);
+                    if (match1 && match1[1]) {
+                        finalSN = match1[1].trim();
+                    } else {
+                        // Coba Pola 2: Mengambil teks awal sebelum tulisan "Saldo" atau "hrg"
+                        let match2 = teksSumber.match(/^(.*?)\s*(?:Saldo|hrg)/i);
+                        if (match2 && match2[1]) {
+                            finalSN = match2[1].trim();
+                        } else {
+                            // Jika tidak masuk pola apapun, tapi datanya valid (bukan error)
+                            if(data.sn && data.sn !== '#N/A' && data.sn !== '-') {
+                                finalSN = data.sn; 
+                            } else {
+                                // Potong teks agar tidak kepanjangan di layar jika formatnya aneh
+                                finalSN = teksSumber.length > 30 ? teksSumber.substring(0, 30) + "..." : teksSumber;
+                            }
+                        }
+                    }
                 }
+                
+                // Tampilkan SN ke layar detail
+                document.getElementById('detail-sn').innerText = finalSN;
+                // ========================================================
 
                 if (statusInfo === 'PROSES' || statusInfo === 'DIPROSES') {
                     if(boxQris) boxQris.classList.add('hidden'); 
@@ -410,7 +437,9 @@
                     document.getElementById('struk-produk').innerText = decodeURIComponent(produk);
                     document.getElementById('struk-nomor').innerText = nomor;
                     document.getElementById('struk-id').innerText = idTrx;
-                    document.getElementById('struk-sn').innerText = data.sn || '-';
+                    
+                    // Masukkan hasil ekstrak SN tadi ke dalam Struk!
+                    document.getElementById('struk-sn').innerText = finalSN;
                     document.getElementById('struk-total').innerText = formatRupiah(totalUnik);
 
                     let pLower = decodeURIComponent(produk).toLowerCase();
