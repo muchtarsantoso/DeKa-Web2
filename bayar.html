@@ -89,56 +89,80 @@
 
             <!-- KOTAK INSTRUKSI TRANSFER BANK / E-WALLET -->
             <div id="instruksi-pembayaran" class="space-y-4 transition-all duration-500">
-                <h3 class="font-bold text-gray-200 text-sm border-b border-gray-700/60 pb-2">
+                
+                <!-- PENGUMUMAN GANGGUAN QRIS -->
+                <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3 flex items-start gap-3 shadow-sm">
+                    <i class="fas fa-exclamation-triangle text-red-400 mt-0.5 text-sm"></i>
+                    <p class="text-[11px] text-red-200/90 leading-relaxed">
+                        <b>INFO PENTING:</b> Sistem QRIS sedang mengalami gangguan. Sementara waktu, pembayaran dialihkan ke Transfer Rekening / E-Wallet di bawah ini.
+                    </p>
+                </div>
+
+                <h3 class="font-bold text-gray-200 text-sm border-b border-gray-700/60 pb-2 mt-2">
                     <i class="fas fa-wallet text-blue-400 mr-2"></i>Pilih Metode Pembayaran
                 </h3>
-                <p class="text-[11px] text-gray-400">Silakan transfer ke salah satu rekening/nomor di bawah ini. (Klik nomor untuk menyalin)</p>
+                <p class="text-[11px] text-gray-400">Silakan transfer ke salah satu rekening/nomor di bawah ini. (Klik ikon untuk menyalin)</p>
 
                 <!-- List Rekening -->
                 <div class="grid grid-cols-1 gap-3">
                     
+                    <!-- Bank BCA -->
+                    <div class="bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#0066AE] rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md">BCA</div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-medium">Bank BCA</p>
+                                <p class="text-sm font-bold text-white tracking-wide">6880 669 689</p>
+                                <p class="text-[10px] text-gray-500 uppercase">a.n Muchtar Santoso</p>
+                            </div>
+                        </div>
+                        <button onclick="salinTeks('6880669689', 'salin-bca', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
+                            <i class="far fa-copy text-lg" id="salin-bca"></i>
+                        </button>
+                    </div>
+
                     <!-- Bank BRI -->
                     <div class="bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors rounded-xl p-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md">BRI</div>
                             <div>
                                 <p class="text-xs text-gray-400 font-medium">Bank BRI</p>
-                                <p class="text-sm font-bold text-white tracking-wide">6389 0101 2345 530</p>
+                                <p class="text-sm font-bold text-white tracking-wide">2113 0101 3300 507</p>
                                 <p class="text-[10px] text-gray-500 uppercase">a.n Muchtar Santoso</p>
                             </div>
                         </div>
-                        <button onclick="salinTeks('638901012345530', 'salin-bri', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
+                        <button onclick="salinTeks('211301013300507', 'salin-bri', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
                             <i class="far fa-copy text-lg" id="salin-bri"></i>
                         </button>
                     </div>
 
-                    <!-- DANA -->
+                    <!-- GoPay -->
                     <div class="bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors rounded-xl p-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md">DANA</div>
+                            <div class="w-10 h-10 bg-[#00AED6] rounded-lg flex items-center justify-center text-white font-bold text-[10px] shadow-md">GOPAY</div>
                             <div>
-                                <p class="text-xs text-gray-400 font-medium">DANA</p>
-                                <p class="text-sm font-bold text-white tracking-wide">0856 3363 066</p>
+                                <p class="text-xs text-gray-400 font-medium">GoPay</p>
+                                <p class="text-sm font-bold text-white tracking-wide">0881 1168 230</p>
                                 <p class="text-[10px] text-gray-500 uppercase">a.n Muchtar Santoso</p>
                             </div>
                         </div>
-                        <button onclick="salinTeks('08563363066', 'salin-dana', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
-                            <i class="far fa-copy text-lg" id="salin-dana"></i>
+                        <button onclick="salinTeks('08811168230', 'salin-gopay', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
+                            <i class="far fa-copy text-lg" id="salin-gopay"></i>
                         </button>
                     </div>
 
-                    <!-- OVO -->
-                    <div class="bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors rounded-xl p-4 flex items-center justify-between">
+                    <!-- ShopeePay -->
+                    <div class="bg-gray-800 border border-gray-700 hover:border-orange-500 transition-colors rounded-xl p-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md">OVO</div>
+                            <div class="w-10 h-10 bg-[#EE4D2D] rounded-lg flex items-center justify-center text-white font-bold text-[10px] shadow-md">SHOPEE</div>
                             <div>
-                                <p class="text-xs text-gray-400 font-medium">OVO / GoPay</p>
-                                <p class="text-sm font-bold text-white tracking-wide">0856 3363 066</p>
-                                <p class="text-[10px] text-gray-500 uppercase">a.n Muchtar Santoso</p>
+                                <p class="text-xs text-gray-400 font-medium">ShopeePay</p>
+                                <p class="text-sm font-bold text-white tracking-wide">0853 1393 7386</p>
+                                <p class="text-[10px] text-gray-500 uppercase">a.n Dwi Khomariyah</p>
                             </div>
                         </div>
-                        <button onclick="salinTeks('08563363066', 'salin-ovo', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
-                            <i class="far fa-copy text-lg" id="salin-ovo"></i>
+                        <button onclick="salinTeks('085313937386', 'salin-shopee', '')" class="text-orange-400 hover:text-white bg-orange-900/30 p-2 rounded-lg transition active:scale-95">
+                            <i class="far fa-copy text-lg" id="salin-shopee"></i>
                         </button>
                     </div>
                     
