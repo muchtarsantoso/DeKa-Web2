@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembayaran QRIS - DeKa Reload</title>
+    <title>Pembayaran - DeKa Reload</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -51,7 +51,7 @@
             <p class="text-sm text-gray-400 font-medium tracking-wide">Memeriksa status pesanan...</p>
         </div>
 
-        <!-- CONTAINER UTAMA (Instruksi QRIS) -->
+        <!-- CONTAINER UTAMA -->
         <main id="main-content" class="hidden p-4 space-y-5 flex-1 pb-24">
 
             <!-- Status Badge Banner -->
@@ -74,7 +74,7 @@
                 
                 <div class="flex items-center justify-center gap-2 my-2">
                     <span id="nominal-tf" class="text-3xl font-extrabold text-blue-400 tracking-tight">Rp 0</span>
-                    <button onclick="salinNominal()" class="bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white text-xs px-2.5 py-1.5 rounded-lg border border-blue-400/30 transition flex items-center gap-1 active:scale-95 shadow">
+                    <button onclick="salinTeks(totalUnik.toString(), 'teks-salin', 'Salin')" class="bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white text-xs px-2.5 py-1.5 rounded-lg border border-blue-400/30 transition flex items-center gap-1 active:scale-95 shadow">
                         <i class="far fa-copy"></i> <span id="teks-salin">Salin</span>
                     </button>
                 </div>
@@ -87,45 +87,94 @@
                 </div>
             </div>
 
-            <!-- KOTAK QRIS DAN INSTRUKSI -->
-            <div id="instruksi-pembayaran" class="space-y-5 transition-all duration-500">
-                <div class="bg-gray-800/80 border border-gray-700/80 rounded-2xl p-5 flex flex-col items-center justify-center shadow-lg">
-                    <div class="flex items-center gap-2 mb-3">
-                        <i class="fas fa-qrcode text-blue-400 text-base"></i>
-                        <h3 class="text-xs font-bold text-gray-200 uppercase tracking-wider">Scan QRIS All Payment</h3>
-                    </div>
-                    
-                    <div class="bg-white p-3 rounded-2xl shadow-xl border-2 border-blue-500/40 my-1">
-                        <img id="gambar-qris" src="qris.jpg" alt="QRIS DeKa Reload" class="w-52 h-52 object-contain" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DEKA_RELOAD_QRIS'">
-                    </div>
-
-                    <p class="text-[10px] text-gray-400 text-center mt-3 max-w-[280px]">
-                        Mendukung GoPay, OVO, DANA, ShopeePay, BCA, BRI, Mandiri, & Seluruh e-Wallet / Mobile Banking.
+            <!-- KOTAK INSTRUKSI TRANSFER BANK / E-WALLET -->
+            <div id="instruksi-pembayaran" class="space-y-4 transition-all duration-500">
+                
+                <!-- PENGUMUMAN GANGGUAN QRIS -->
+                <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-3 flex items-start gap-3 shadow-sm">
+                    <i class="fas fa-exclamation-triangle text-red-400 mt-0.5 text-sm"></i>
+                    <p class="text-[11px] text-red-200/90 leading-relaxed">
+                        <b>INFO PENTING:</b> Sistem QRIS sedang mengalami gangguan. Sementara waktu, pembayaran dialihkan ke Transfer Rekening / E-Wallet di bawah ini.
                     </p>
                 </div>
 
-                <div class="bg-gray-800/40 border border-gray-700/60 rounded-2xl p-4 text-xs space-y-2.5">
-                    <h3 class="font-bold text-gray-200 text-xs border-b border-gray-700/60 pb-2 flex items-center gap-2">
-                        <i class="fas fa-mobile-alt text-blue-400"></i> Cara Bayar dari HP yang sama:
-                    </h3>
-                    <div class="space-y-2 text-gray-300 text-[11px] leading-relaxed">
-                        <div class="flex items-start gap-2.5">
-                            <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">1</span>
-                            <p><b>Screenshot</b> layar yang menampilkan QRIS di atas.</p>
+                <h3 class="font-bold text-gray-200 text-sm border-b border-gray-700/60 pb-2 mt-2">
+                    <i class="fas fa-wallet text-blue-400 mr-2"></i>Pilih Metode Pembayaran
+                </h3>
+                <p class="text-[11px] text-gray-400">Silakan transfer ke salah satu rekening/nomor di bawah ini. (Klik ikon untuk menyalin)</p>
+
+                <!-- List Rekening -->
+                <div class="grid grid-cols-1 gap-3">
+                    
+                    <!-- Bank BCA -->
+                    <div class="bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#0066AE] rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md">BCA</div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-medium">Bank BCA</p>
+                                <p class="text-sm font-bold text-white tracking-wide">6880 669 689</p>
+                                <p class="text-[10px] text-gray-500 uppercase">a.n Muchtar Santoso</p>
+                            </div>
                         </div>
-                        <div class="flex items-start gap-2.5">
-                            <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">2</span>
-                            <p>Buka aplikasi Bank atau E-Wallet pilihan Anda.</p>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">3</span>
-                            <p>Pilih menu <b>Scan / QRIS</b> lalu klik ikon <b>Galeri / Foto</b>.</p>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <span class="bg-blue-600/20 text-blue-400 font-bold px-2 py-0.5 rounded text-[10px] border border-blue-500/20">4</span>
-                            <p>Pilih foto hasil screenshot QRIS tadi dan masukkan nominal persis.</p>
-                        </div>
+                        <button onclick="salinTeks('6880669689', 'salin-bca', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
+                            <i class="far fa-copy text-lg" id="salin-bca"></i>
+                        </button>
                     </div>
+
+                    <!-- Bank BRI -->
+                    <div class="bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md">BRI</div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-medium">Bank BRI</p>
+                                <p class="text-sm font-bold text-white tracking-wide">2113 0101 3300 507</p>
+                                <p class="text-[10px] text-gray-500 uppercase">a.n Muchtar Santoso</p>
+                            </div>
+                        </div>
+                        <button onclick="salinTeks('211301013300507', 'salin-bri', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
+                            <i class="far fa-copy text-lg" id="salin-bri"></i>
+                        </button>
+                    </div>
+
+                    <!-- GoPay -->
+                    <div class="bg-gray-800 border border-gray-700 hover:border-blue-500 transition-colors rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#00AED6] rounded-lg flex items-center justify-center text-white font-bold text-[10px] shadow-md">GOPAY</div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-medium">GoPay</p>
+                                <p class="text-sm font-bold text-white tracking-wide">0881 1168 230</p>
+                                <p class="text-[10px] text-gray-500 uppercase">a.n Muchtar Santoso</p>
+                            </div>
+                        </div>
+                        <button onclick="salinTeks('08811168230', 'salin-gopay', '')" class="text-blue-400 hover:text-white bg-blue-900/30 p-2 rounded-lg transition active:scale-95">
+                            <i class="far fa-copy text-lg" id="salin-gopay"></i>
+                        </button>
+                    </div>
+
+                    <!-- ShopeePay -->
+                    <div class="bg-gray-800 border border-gray-700 hover:border-orange-500 transition-colors rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#EE4D2D] rounded-lg flex items-center justify-center text-white font-bold text-[10px] shadow-md">SHOPEE</div>
+                            <div>
+                                <p class="text-xs text-gray-400 font-medium">ShopeePay</p>
+                                <p class="text-sm font-bold text-white tracking-wide">0853 1393 7386</p>
+                                <p class="text-[10px] text-gray-500 uppercase">a.n Dwi Khomariyah</p>
+                            </div>
+                        </div>
+                        <button onclick="salinTeks('085313937386', 'salin-shopee', '')" class="text-orange-400 hover:text-white bg-orange-900/30 p-2 rounded-lg transition active:scale-95">
+                            <i class="far fa-copy text-lg" id="salin-shopee"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TOMBOL KONFIRMASI WA -->
+                <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4 text-center mt-3 shadow-md">
+                    <p class="text-[11px] text-green-200/90 mb-3 leading-relaxed">
+                        Sudah melakukan transfer? Silakan klik tombol di bawah untuk <b>konfirmasi ke WhatsApp Admin</b> agar pesanan Anda segera diproses.
+                    </p>
+                    <button onclick="konfirmasiWA()" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl transition shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-xl"></i> Konfirmasi via WhatsApp
+                    </button>
                 </div>
             </div>
 
@@ -319,16 +368,35 @@
         let namaProvider = providerUrl !== '' ? decodeURIComponent(providerUrl) : '-';
         document.getElementById('detail-provider').innerText = namaProvider;
 
-        function salinNominal() {
-            navigator.clipboard.writeText(totalUnik.toString());
-            const teksSalin = document.getElementById('teks-salin');
-            teksSalin.innerText = 'Tersalin!';
-            setTimeout(() => { teksSalin.innerText = 'Salin'; }, 2000);
+        // FUNGSI COPY TEKS UMUM
+        function salinTeks(teks, idElemen, teksKembali) {
+            navigator.clipboard.writeText(teks);
+            const elemen = document.getElementById(idElemen);
+            
+            if(teksKembali !== '') {
+                // Untuk tombol dengan teks (seperti nominal)
+                elemen.innerText = 'Tersalin!';
+                setTimeout(() => { elemen.innerText = teksKembali; }, 2000);
+            } else {
+                // Untuk tombol icon saja (seperti rekening)
+                elemen.className = "fas fa-check text-green-400 text-lg";
+                setTimeout(() => { elemen.className = "far fa-copy text-lg"; }, 2000);
+            }
         }
 
         function salinIdTrx() {
             navigator.clipboard.writeText(idTrx);
             alert("ID Transaksi disalin!");
+        }
+
+        // FUNGSI KONFIRMASI WA
+        function konfirmasiWA() {
+            const noWA = "628811168230";
+            // Pesan otomatis yang akan dikirim ke WA Bapak
+            const pesan = `Halo Admin DeKa Reload,\n\nSaya sudah melakukan transfer sebesar *${formatRupiah(totalUnik)}*.\n\nDetail Pesanan:\n- ID Transaksi: *${idTrx}*\n- Produk: ${decodeURIComponent(produk)}\n- Nomor: ${nomor}\n\nMohon segera dicek dan diproses. Terima kasih.`;
+            
+            const linkWA = `https://wa.me/${noWA}?text=${encodeURIComponent(pesan)}`;
+            window.open(linkWA, '_blank');
         }
 
         let statusInterval;
@@ -370,32 +438,26 @@
                 // LOGIKA CERDAS: EKSTRAK SN LANGSUNG DARI JAVASCRIPT
                 // ========================================================
                 let finalSN = '-';
-                // Ambil data teks sumber (bisa dari kolom Keterangan atau SN)
                 let teksSumber = data.keterangan || data.sn || "";
 
                 if (teksSumber && teksSumber !== '#N/A' && teksSumber !== '-') {
-                    // Coba Pola 1: Mencari tulisan "SN: (kode_sn) Saldo" atau "hrg"
                     let match1 = teksSumber.match(/SN:\s*(.*?)\s*(?:Saldo|hrg)/i);
                     if (match1 && match1[1]) {
                         finalSN = match1[1].trim();
                     } else {
-                        // Coba Pola 2: Mengambil teks awal sebelum tulisan "Saldo" atau "hrg"
                         let match2 = teksSumber.match(/^(.*?)\s*(?:Saldo|hrg)/i);
                         if (match2 && match2[1]) {
                             finalSN = match2[1].trim();
                         } else {
-                            // Jika tidak masuk pola apapun, tapi datanya valid (bukan error)
                             if(data.sn && data.sn !== '#N/A' && data.sn !== '-') {
                                 finalSN = data.sn; 
                             } else {
-                                // Potong teks agar tidak kepanjangan di layar jika formatnya aneh
                                 finalSN = teksSumber.length > 30 ? teksSumber.substring(0, 30) + "..." : teksSumber;
                             }
                         }
                     }
                 }
                 
-                // Tampilkan SN ke layar detail
                 document.getElementById('detail-sn').innerText = finalSN;
                 // ========================================================
 
@@ -438,7 +500,6 @@
                     document.getElementById('struk-nomor').innerText = nomor;
                     document.getElementById('struk-id').innerText = idTrx;
                     
-                    // Masukkan hasil ekstrak SN tadi ke dalam Struk!
                     document.getElementById('struk-sn').innerText = finalSN;
                     document.getElementById('struk-total').innerText = formatRupiah(totalUnik);
 
